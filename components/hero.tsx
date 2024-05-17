@@ -1,9 +1,10 @@
+"use client";
 import { ChevronRight, Ghost } from "lucide-react";
 import AnimatedGradientText from "./ui/animated-gradient-text";
 import { cn } from "@/lib/utils";
-import ShimmerButton from "./ui/shimmer-button";
 import { Button } from "./ui/button";
 import { HeroImage } from "./heroimage";
+import Link from "next/link";
 
 const SiteHero = () => {
   return (
@@ -27,7 +28,9 @@ const SiteHero = () => {
         CMS
       </p>
       <div className="pt-6 flex gap-4 items-center">
-        <Button className="text-md">Dashboard</Button>
+        <Link href="/sign-up">
+          <Button className="text-md">Dashboard</Button>
+        </Link>
         <Button variant="ghost" className="text-md">
           Demo Video
         </Button>

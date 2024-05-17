@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 const SiteHeader = () => {
   return (
@@ -11,8 +14,12 @@ const SiteHeader = () => {
         <h2 className="text-xl font-bold">BlogCMS</h2>
       </div>
       <div className="flex gap-3 items-center">
-        <Button variant={"ghost"}>Sign Up</Button>
-        <Button>Login</Button>
+        <Link href="/signup">
+          <Button variant={"ghost"}>Sign Up</Button>
+        </Link>
+        <Link href="/login">
+          <Button>Login</Button>
+        </Link>
       </div>
     </div>
   );
