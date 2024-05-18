@@ -1,7 +1,6 @@
 import CreatorTools from "@/components/creatortools";
 import SideHeader from "@/components/dashboard-component/sideheader";
 import { Icons } from "@/components/icons";
-import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import {
   Sheet,
@@ -11,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { AccountdownMenu } from "@/components/acountdrop";
 
 export default function DashboardLayout({
   children,
@@ -35,7 +35,7 @@ export default function DashboardLayout({
             </Sheet>
           </div>
           <div>
-            <UserButton showName />
+            <AccountdownMenu />
           </div>
         </div>
         {children}

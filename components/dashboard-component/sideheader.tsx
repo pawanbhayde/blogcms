@@ -38,12 +38,14 @@ const SideHeader = () => {
 
   return (
     <div>
-      <div className="flex gap-3  items-center">
-        <div>
-          <Image src="/images/logo.png" width={30} height={30} alt="logo" />
+      <Link href={"/"}>
+        <div className="flex gap-3  items-center">
+          <div>
+            <Image src="/images/logo.png" width={30} height={30} alt="logo" />
+          </div>
+          <h2 className="text-xl font-bold">BlogCMS</h2>
         </div>
-        <h2 className="text-xl font-bold">BlogCMS</h2>
-      </div>
+      </Link>
       <div className="mt-8">
         {menuList.map((menu) => (
           <Link href={menu.link}>

@@ -5,8 +5,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { HeroImage } from "./heroimage";
 import Link from "next/link";
+import useAuth from "@/lib/useAuth";
 
 const SiteHero = () => {
+  const user = useAuth();
   return (
     <div className="container relative py-20 flex flex-col items-center justify-center">
       <AnimatedGradientText>
@@ -28,9 +30,16 @@ const SiteHero = () => {
         CMS
       </p>
       <div className="pt-6 flex gap-4 items-center">
-        <Link href="/sign-up">
-          <Button className="text-md">Dashboard</Button>
-        </Link>
+        {user ? (
+          <Link href="/dashboard">
+            <Button className="text-md">Dashboard</Button>
+          </Link>
+        ) : (
+          <Link href="/signup">
+            <Button className="text-md">Dashboard</Button>
+          </Link>
+        )}
+
         <Button variant="ghost" className="text-md">
           Demo Video
         </Button>
