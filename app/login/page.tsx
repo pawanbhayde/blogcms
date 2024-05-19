@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { Icons } from "@/components/icons";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -114,8 +115,9 @@ const Login = () => {
               <Button
                 onClick={handleGoogleLogin}
                 variant="outline"
-                className="w-full"
+                className="w-full flex gap-3"
               >
+                <Icons.google />
                 Login with Google
               </Button>
             </div>

@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import { Icons } from "@/components/icons";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -116,8 +117,9 @@ const Signup = () => {
               <Button
                 onClick={handleGoogleSignup}
                 variant="outline"
-                className="w-full"
+                className="w-full flex gap-3"
               >
+                <Icons.google />
                 Sign up with Google
               </Button>
             </div>
