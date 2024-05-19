@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -27,6 +28,43 @@ const Signup = () => {
       alert(
         "Signup successful, please check your email for verification link."
       );
+  };
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleAuthChange = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        router.push("/"); // Redirect to the root page or dashboard
+      }
+    };
+
+    handleAuthChange();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session) {
+          router.push("/");
+        }
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
+
+  const handleGoogleSignup = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+
+    if (error) {
+      console.error("Error signing up with Google:", error);
+    }
   };
 
   return (
@@ -75,8 +113,12 @@ const Signup = () => {
                 Create an account
               </Button>
               {error && <p>{error}</p>}
-              <Button variant="outline" className="w-full">
-                Sign up with GitHub
+              <Button
+                onClick={handleGoogleSignup}
+                variant="outline"
+                className="w-full"
+              >
+                Sign up with Google
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

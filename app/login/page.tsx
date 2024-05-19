@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
@@ -29,6 +29,41 @@ const Login = () => {
     });
     if (error) setError(error.message);
     else router.push("/dashboard");
+  };
+
+  useEffect(() => {
+    const handleAuthChange = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        router.push("/"); // Redirect to the root page or dashboard
+      }
+    };
+
+    handleAuthChange();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session) {
+          router.push("/");
+        }
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
+
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+
+    if (error) {
+      console.error("Error signing in with Google:", error);
+    }
   };
 
   return (
@@ -75,9 +110,13 @@ const Login = () => {
               <Button type="submit" className="w-full">
                 Login
               </Button>
-              <Button variant="outline" className="w-full">
+              {error && <p>{error}</p>}
+              <Button
+                onClick={handleGoogleLogin}
+                variant="outline"
+                className="w-full"
+              >
                 Login with Google
-                {error && <p>{error}</p>}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

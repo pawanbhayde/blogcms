@@ -12,7 +12,7 @@ const SiteHeader = () => {
   const user = useAuth();
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push("/"); // Redirect to the root page after sign-out
+    router.push("/");
   };
 
   return (
