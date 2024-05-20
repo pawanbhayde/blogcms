@@ -7,12 +7,12 @@ const SideHeader = () => {
     {
       name: "Dashboard",
       icon: <Icons.home />,
-      link: "/",
+      link: "/dashboard",
     },
     {
       name: "Articles",
       icon: <Icons.articles />,
-      link: "/",
+      link: "/dashboard/articles",
     },
     {
       name: "Categories",

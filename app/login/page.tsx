@@ -38,7 +38,7 @@ const Login = () => {
         data: { session },
       } = await supabase.auth.getSession();
       if (session) {
-        router.push("/"); // Redirect to the root page or dashboard
+        router.push("/"); 
       }
     };
 
