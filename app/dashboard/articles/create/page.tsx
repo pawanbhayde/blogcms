@@ -1,81 +1,59 @@
 "use client";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
-import Tiptap from "@/components/tiptap";
+import { Input } from "@/components/ui/input";
+import JoditEditor from "jodit-react";
+import { useRef, useState } from "react";
 
 const CreateArticle = () => {
-  const fromSchema = z.object({
-    title: z
-      .string()
-      .min(5, { message: "Hey the title is not long enough" })
-      .max(100, { message: "Hey the title is too long" }),
-    blogcontent: z
-      .string()
-      .min(100, { message: "Hey the blog content is not long enough" })
-      .max(1000, { message: "Hey the blog content is too long" })
-      .trim(),
-  });
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
+  const [htmlContent, setHtmlContent] = useState("");
 
-  const form = useForm<z.infer<typeof fromSchema>>({
-    resolver: zodResolver(fromSchema),
-    mode: "onChange",
-    defaultValues: {
-      title: "",
-      blogcontent: "",
-    },
-  });
+  const handleEditorChange = (newContent: string) => {
+    setContent(newContent);
+    setHtmlContent(newContent);
+  };
 
-  function onSubmit(values: z.infer<typeof fromSchema>) {
-    console.log(values);
-  }
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    // Handle form submission here, e.g., send content to a server
+  };
+
   return (
-    <main>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="Article Title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          ></FormField>
-          <FormField
-            control={form.control}
-            name="blogcontent"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Blog Content</FormLabel>
-                <FormControl>
-                  <Tiptap descreption={field.name} onChange={field.onChange} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          ></FormField>
-          <Button className="absolute top-20 right-20" type="submit">
-            Publish
-          </Button>
-        </form>
-      </Form>
-    </main>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="title">Title</label>
+          <Input type="text" id="title" name="title" />
+        </div>
+        <div className="flex w-full gap-10">
+          <div className="w-[300px]">
+            <label htmlFor="author">Author</label>
+            <Input type="text" id="author" name="author" />
+          </div>
+          <div className="w-[300px]">
+            <label htmlFor="category">Category</label>
+            <Input type="text" id="category" name="category" />
+          </div>
+        </div>
+        <div className="mt-4">
+          <label htmlFor="content">Content</label>
+          <JoditEditor
+            ref={editor}
+            value={content}
+            onChange={handleEditorChange}
+          />
+        </div>
+        <Button className="absolute top-20 right-10" type="submit">
+          Publish
+        </Button>
+      </form>
+      <div className="mt-10">
+        <h2>Preview</h2>
+        <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
+      </div>
+    </div>
   );
 };
 

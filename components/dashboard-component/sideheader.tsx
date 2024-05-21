@@ -17,12 +17,12 @@ const SideHeader = () => {
     {
       name: "Categories",
       icon: <Icons.category />,
-      link: "/",
+      link: "/dashboard/categories",
     },
     {
       name: "Authors",
       icon: <Icons.author />,
-      link: "/",
+      link: "/dashboard/authors",
     },
     {
       name: "API",
