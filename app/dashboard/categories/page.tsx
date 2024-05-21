@@ -8,7 +8,7 @@ const CategoryPage = () => {
       <div className="flex-1">
         <h1 className="text-5xl font-bold pb-4">Create a category</h1>
         <p className="text-lg text-muted-foreground pb-4 font-semibold">
-          Categories help organize your blogs
+          Categories help organize your articles
         </p>
         <label htmlFor="category">Category</label>
         <Input className="mb-3 w-9/12" type="text" />
