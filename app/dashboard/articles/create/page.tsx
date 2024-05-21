@@ -2,8 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import JoditEditor from "jodit-react";
+import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
+
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 const CreateArticle = () => {
   const editor = useRef(null);
