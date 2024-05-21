@@ -2,9 +2,7 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,7 +15,7 @@ const Articles = () => {
       description: "Article Description 1",
       author: "Author 1",
       category: "Category 1",
-    },
+    },  
     {
       title: "Article 2",
       description: "Article Description 1",
