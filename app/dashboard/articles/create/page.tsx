@@ -4,6 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
@@ -27,16 +34,56 @@ const CreateArticle = () => {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="title">Title</label>
-          <Input type="text" id="title" name="title" />
+          <Input placeholder="Enter title here" type="text" name="title" />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="subtitle">Subtitle</label>
+          <Input
+            placeholder="Enter subtitle here"
+            type="text"
+            name="subtitle"
+          />
+        </div>
+        <div className="mb-4 flex gap-10">
+          <div className="flex-1">
+            <label htmlFor="slug">Slug</label>
+            <Input placeholder="Enter slug here" type="text" name="slug" />
+          </div>
+          <div className="flex-1">
+            <label htmlFor="slug">Keywords</label>
+            <Input placeholder="Enter keywords here" type="text" name="slug" />
+          </div>
         </div>
         <div className="flex w-full gap-10">
-          <div className="w-[300px]">
-            <label htmlFor="author">Author</label>
-            <Input type="text" id="author" name="author" />
+          <div className="flex-1">
+            <label htmlFor="coverimage">Cover Image</label>
+            <Input type="file" name="coverimage" />
           </div>
-          <div className="w-[300px]">
+          <div className="flex-1">
+            <label htmlFor="author">Author</label>
+            <Select>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select Author" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="johndoe">John Doe</SelectItem>
+                <SelectItem value="cris">Cris Doe</SelectItem>
+                <SelectItem value="von">Von Doe</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex-1">
             <label htmlFor="category">Category</label>
-            <Input type="text" id="category" name="category" />
+            <Select>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Development">Development</SelectItem>
+                <SelectItem value="Design">Design</SelectItem>
+                <SelectItem value="Roadmaps">Roadmaps</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <div className="mt-4">

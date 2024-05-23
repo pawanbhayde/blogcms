@@ -1,71 +1,109 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/lib/useUser";
+
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "../ui/button";
+import { Icons } from "../icons";
 
-const invoices = [
-  {
-    srno: "001",
-    date: "10/10/2021",
-    category: "Development",
-  },
-  {
-    srno: "002",
-    date: "10/10/2021",
-    category: "Design",
-  },
-  {
-    srno: "003",
-    date: "10/10/2021",
-    category: "Roadmaps",
-  },
-  {
-    srno: "004",
-    date: "10/10/2021",
-    category: "Courses",
-  },
-  {
-    srno: "005",
-    date: "10/10/2021",
-    category: "UI Kits",
-  },
-  {
-    srno: "006",
-    date: "10/10/2021",
-    category: "Bootcamps",
-  },
-  {
-    srno: "007",
-    date: "10/10/2021",
-    category: "Goodies",
-  },
-];
+type Category = {
+  id: number;
+  category_name: string;
+  created_at: string;
+  user_id: string; // Include user_id in the type
+};
 
 export function Category() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUser(); // Custom hook to get the current user
+
+  const fetchCategories = async () => {
+    if (!user) return; // Ensure user is logged in
+
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("user_id", user.id) // Filter by user ID
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching categories:", error);
+    } else {
+      setCategories(data);
+    }
+    setLoading(false);
+  };
+
+  const deleteCategory = async (id: number) => {
+    setLoading(true);
+    const { error } = await supabase
+      .from("categories")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user!.id); // Ensure only deleting user's own categories
+
+    if (error) {
+      console.error("Error deleting category:", error);
+    } else {
+      fetchCategories(); // Refresh categories after deletion
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, [user]);
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Sr No.</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead className="text-right">Date</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.srno}>
-            <TableCell className="font-medium">{invoice.srno}</TableCell>
-            <TableCell>{invoice.category}</TableCell>
-            <TableCell className="text-right">{invoice.date}</TableCell>
+    <div>
+      <div className="flex p-10 justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Categories</h2>
+        <Button className="flex gap-1" onClick={fetchCategories}>
+          <Icons.refresh /> Refresh
+        </Button>
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Sr No.</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Date</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {categories.map((category, index) => (
+            <TableRow key={category.id}>
+              <TableCell className="font-medium">{index + 1}</TableCell>
+              <TableCell>{category.category_name}</TableCell>
+              <TableCell className="text-right">
+                {new Date(category.created_at).toLocaleDateString()}
+              </TableCell>
+              <TableCell className="text-right">
+                <Button
+                  onClick={() => deleteCategory(category.id)}
+                  disabled={loading}
+                  variant="secondary"
+                >
+                  <Icons.delete />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
