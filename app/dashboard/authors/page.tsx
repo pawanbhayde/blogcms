@@ -1,52 +1,55 @@
 "use client";
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Authors } from "@/components/dashboard-component/authorsTable";
-import { useUser } from "@/lib/useUser";
+import { supabase } from "@/lib/supabaseClient";
+import { useState } from "react";
 
 const AuthorPage = () => {
-  const [authorName, setAuthorName] = useState("");
-  const [instagramUsername, setInstagramUsername] = useState("");
-  const [twitterUsername, setTwitterUsername] = useState("");
-  const [authorImage, setAuthorImage] = useState<File | null>(null);
-  const { user } = useUser(); // Get the current logged-in user
+  const [name, setName] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [image, setImage] = useState<File | null>(null); // Define the type for the image state
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!user || !authorName) return;
-
-    const formData = new FormData();
-    formData.append("name", authorName);
-    formData.append("instagram_username", instagramUsername);
-    formData.append("twitter_username", twitterUsername);
-    if (authorImage) {
-      formData.append("author_image", authorImage);
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let imageUrl = "";
 
     try {
-      const { data, error } = await supabase.from("authors").insert([
-        {
-          user_id: user.id,
-          name: authorName,
-          instagram_username: instagramUsername,
-          twitter_username: twitterUsername,
-          author_image: authorImage ? authorImage : null,
-        },
-      ]);
-      if (error) {
-        console.error("Error creating author:", error);
-      } else {
-        console.log("Author created successfully:", data);
-        // Clear form fields after successful submission
-        setAuthorName("");
-        setInstagramUsername("");
-        setTwitterUsername("");
-        setAuthorImage(null);
+      // Upload image to Supabase storage
+      if (image) {
+        const { data, error } = await supabase.storage
+          .from("authors")
+          .upload(`public/${image.name}`, image);
+
+        if (error) {
+          console.error("Error uploading image:", error);
+          return;
+        }
+        imageUrl = data.path;
       }
-    } catch (error) {
-      console.error("Error creating author: ", error);
+
+      // Insert author data into Supabase
+      const { error } = await supabase
+        .from("authors")
+        .insert([{ name, instagram, twitter, image_url: imageUrl }]);
+
+      if (error) {
+        console.error("Error inserting author:", error);
+      } else {
+        alert("Author created successfully!");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImage(e.target.files[0]);
+    } else {
+      setImage(null);
     }
   };
 
@@ -57,36 +60,37 @@ const AuthorPage = () => {
         <p className="text-lg text-muted-foreground pb-4 font-semibold">
           Create an author to add to your articles
         </p>
+
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Enter your name</label>
           <Input
             className="mb-3"
             placeholder="Name"
             type="text"
-            value={authorName}
-            onChange={(e) => setAuthorName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <label htmlFor="instagram">Enter your Instagram username</label>
           <Input
             className="mb-3"
             placeholder="Instagram Username"
             type="text"
-            value={instagramUsername}
-            onChange={(e) => setInstagramUsername(e.target.value)}
+            value={instagram}
+            onChange={(e) => setInstagram(e.target.value)}
           />
           <label htmlFor="twitter">Enter your Twitter username</label>
           <Input
             className="mb-3"
             placeholder="Twitter username"
             type="text"
-            value={twitterUsername}
-            onChange={(e) => setTwitterUsername(e.target.value)}
+            value={twitter}
+            onChange={(e) => setTwitter(e.target.value)}
           />
           <label htmlFor="image">Upload Author Image</label>
           <Input
             className="mb-3"
             type="file"
-            onChange={(e) => setAuthorImage(e.target.files?.[0] || null)}
+            onChange={handleImageChange} // Use the separate function to handle image change
           />
           <Button type="submit">Submit</Button>
         </form>
