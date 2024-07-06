@@ -3,7 +3,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/lib/useUser"; // Custom hook to get the current user
+import { useUser } from "@/lib/useUser"; 
 import { Category } from "@/components/dashboard-component/categoriesTable";
 
 const CategoryPage = () => {

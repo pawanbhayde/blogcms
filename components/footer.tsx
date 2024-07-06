@@ -31,7 +31,7 @@ const Footer = () => {
           </div>
         </div>
         <p className="w-full pt-10 border-t">
-          © 2024 SupaNext CMS. All rights reserved.
+          © 2024 BlogCMS. All rights reserved.
         </p>
       </div>
     </div>

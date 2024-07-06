@@ -27,7 +27,7 @@ const SideHeader = () => {
     {
       name: "API",
       icon: <Icons.api />,
-      link: "/",
+      link: "/dashboard/api",
     },
     {
       name: "Settings",

@@ -34,7 +34,7 @@ export function Category() {
     const { data, error } = await supabase
       .from("categories")
       .select("*")
-      .eq("user_id", user.id) // Filter by user ID
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -51,12 +51,12 @@ export function Category() {
       .from("categories")
       .delete()
       .eq("id", id)
-      .eq("user_id", user!.id); // Ensure only deleting user's own categories
+      .eq("user_id", user!.id);
 
     if (error) {
       console.error("Error deleting category:", error);
     } else {
-      fetchCategories(); // Refresh categories after deletion
+      fetchCategories();
     }
     setLoading(false);
   };
