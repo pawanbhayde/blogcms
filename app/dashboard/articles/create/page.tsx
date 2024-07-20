@@ -99,6 +99,9 @@ const CreateArticle = () => {
       coverImageUrl = publicUrl || null;
     }
 
+    // get current session user id
+    const userId = user.id;
+
     const { error } = await supabase.from("articles").insert([
       {
         title,
@@ -109,6 +112,7 @@ const CreateArticle = () => {
         author_id: selectedAuthor,
         category_id: selectedCategory,
         content,
+        user_id: userId, // Add this line to store the user ID
       },
     ]);
 

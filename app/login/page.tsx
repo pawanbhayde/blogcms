@@ -69,15 +69,15 @@ const Login = () => {
 
   return (
     <div className="h-[100vh] w-full flex justify-center items-center">
-      <form onSubmit={handleLogin}>
-        <Card className="mx-auto max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
-            <CardDescription>
-              Enter your email below to login to your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+      <Card className="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin}>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -112,24 +112,24 @@ const Login = () => {
                 Login
               </Button>
               {error && <p>{error}</p>}
-              <Button
-                onClick={handleGoogleLogin}
-                variant="outline"
-                className="w-full flex gap-3"
-              >
-                <Icons.google />
-                Login with Google
-              </Button>
             </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline">
-                Sign up
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </form>
+          </form>
+          <Button
+            onClick={handleGoogleLogin}
+            variant="outline"
+            className="w-full mt-3 flex gap-3"
+          >
+            <Icons.google />
+            Login with Google
+          </Button>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
